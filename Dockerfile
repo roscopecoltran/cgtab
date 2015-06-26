@@ -1,0 +1,37 @@
+FROM ubuntu:14.04.1
+
+MAINTAINER Gerard Choinka <gerard.choinka@ambrosys.de>
+
+#####
+# Build
+#  docker run --name='apt-cacher-ng' -d -p 3142:3142 sameersbn/apt-cacher-ng:latest
+#  docker build -t cgtab-prof-of-concept .
+#####
+# Run
+#
+#####
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV TERM xterm
+RUN locale-gen --no-purge en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+RUN update-locale LANG=en_US.UTF-8
+
+
+RUN echo 'Acquire::http { Proxy "http://172.17.42.1:3142"; };' >> /etc/apt/apt.conf.d/01proxy
+
+
+RUN apt-get -y update && \
+    apt-get -y install git build-essential ssh-client wget
+
+
+RUN wget -qO- http://www.cmake.org/files/v3.3/cmake-3.3.0-rc2.tar.gz | tar xvz --directory /opt/
+RUN cd /opt/cmake-*/ && ./bootstrap && make && make install
+ 
+
+    
+ADD . /src/cgtab 
+
+RUN mkdir /src/cgtab/build && cd /src/cgtab/build && cmake ..
+
+ENTRYPOINT /usr/bin/tail -f /dev/null

@@ -32,7 +32,7 @@ RUN wget -qO- http://www.cmake.org/files/v3.3/cmake-3.3.0-rc2.tar.gz | tar xvz -
 RUN cd /opt/cmake-*/ && ./bootstrap && make && make install
  
 RUN git clone https://github.com/git/git /opt/git && \
-    make install
+    make install -C /opt/git
     
 ENV PATH ${HOME}/bin/:${PATH}
 

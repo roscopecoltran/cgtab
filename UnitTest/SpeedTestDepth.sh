@@ -16,36 +16,25 @@ git init
 git config user.email "you@example.com"
 git config user.name "Your Name"
 
-dd if=/dev/urandom of=random_file.bin bs=1G count=1
-time git add random_file.bin
-time git commit -m 'commit0'
+SIZE=1GiB
+for((i=0; i < 3; ++i))
+do
+    echo -e "\n######Run No. $i"
+    echo -e "\n######\n# making random file size:${SIZE}\n"
+    dd if=/dev/urandom of=random_file.bin bs=${SIZE} count=1
+    echo -e "\n######\n"
+    
+    REPO_SIZE=$(du .git -sh | awk '{ print $1 }')
+    
+    echo -e "\n######\n# commiting file to a ${REPO_SIZE} repo \n"
+    time (git add random_file.bin && git commit -m "commit$i" )
+    echo -e "\n######\n"
 
-echo "Normal Clone, Working dir 1 GiB, repo 1 GiB"
-time git clone "${TEST_SOURCE_REPO_URL}" "${TEST_DST_REPO_PATH}"
+    echo -e "\n######\n# normal clone full repo\n"
+    time git clone "${TEST_SOURCE_REPO_URL}" "${TEST_DST_REPO_PATH}"
+    echo -e "\n######\n"
 
-echo "Depth 1 Clone, Working dir 1 GiB, repo 1 GiB"
-time git clone --depth 1 "${TEST_SOURCE_REPO_URL}" "${TEST_DSTDEPTH_REPO_PATH}"
-
-dd if=/dev/urandom of=random_file.bin bs=1G count=1
-time git add random_file.bin
-time git commit -m 'commit1'
-
-echo "Normal Clone, Working dir 1 GiB, repo 2 GiB"
-rm -rf "${TEST_DST_REPO_PATH}"
-time git clone "${TEST_SOURCE_REPO_URL}" "${TEST_DST_REPO_PATH}"
-
-rm -rf "${TEST_DSTDEPTH_REPO_PATH}"
-echo "Depth 1 Clone, Working dir 1 GiB, repo 2 GiB"
-time git clone --depth 1 "${TEST_SOURCE_REPO_URL}" "${TEST_DSTDEPTH_REPO_PATH}"
-
-dd if=/dev/urandom of=random_file.bin bs=1G count=1
-time git add random_file.bin
-time git commit -m 'commit2'
-
-echo "Normal Clone, Working dir 1 GiB, repo 3 GiB"
-rm -rf "${TEST_DST_REPO_PATH}"
-time git clone "${TEST_SOURCE_REPO_URL}" "${TEST_DST_REPO_PATH}"
-
-rm -rf "${TEST_DSTDEPTH_REPO_PATH}"
-echo "Depth 1 Clone, Working dir 1 GiB, repo 3 GiB"
-time git clone --depth 1 "${TEST_SOURCE_REPO_URL}" "${TEST_DSTDEPTH_REPO_PATH}"
+    echo -e "\n######\n# depth 1 clone, only last revision\n"
+    time git clone --depth 1 "${TEST_SOURCE_REPO_URL}" "${TEST_DSTDEPTH_REPO_PATH}"
+    echo -e "\n######\n"
+done

@@ -15,4 +15,5 @@ set ( THIRDPARTY_BASE_REMOTE2 "git@github.com:myrepo" CACHE STRING "Path to the 
 set ( FOOBAR_REMOTE0 "${CMAKE_SOURCE_DIR_PATENT}/repos/foobar" CACHE STRING "Path to the directory ... is located" )
 set ( FOOBAR_REMOTE1 "/media/xyu/myusbstick/foobar" CACHE STRING "Path to the directory ... is located" )
 set ( FOOBAR_REMOTE2 "git@github.com:myrepo/foobar" CACHE STRING "Path to the directory ... is located" )
-#
+
+find_package( Git )

@@ -8,7 +8,7 @@ MAINTAINER Gerard Choinka <gerard.choinka@ambrosys.de>
 #  docker build -t cgtab-prof-of-concept .
 #####
 # Run
-#
+#  docker run --rm -it --entrypoint bash --volume=$PWD:/vol/cgtab cgtab-prof-of-concept
 #####
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -23,7 +23,7 @@ RUN nc -z 172.17.42.1 3142 && echo 'Acquire::http { Proxy "http://172.17.42.1:31
 
 RUN apt-get -y update && \
     apt-get -y install git build-essential ssh-client wget && \
-    apt-get build-dep git
+    apt-get -y build-dep git
 
  
 RUN test -f "${APT_PROXY_CONFIG}" && rm "${APT_PROXY_CONFIG}"

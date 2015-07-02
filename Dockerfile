@@ -22,7 +22,7 @@ ENV APT_PROXY_CONFIG /etc/apt/apt.conf.d/01proxy
 RUN nc -z 172.17.42.1 3142 && echo 'Acquire::http { Proxy "http://172.17.42.1:3142"; };' >> "${APT_PROXY_CONFIG}"
 
 RUN apt-get -y update && \
-    apt-get -y install git build-essential ssh-client wget libssl-dev && \
+    apt-get -y install git build-essential ssh-client wget libssl-dev man && \
     apt-get -y build-dep git
 
  
@@ -41,4 +41,4 @@ ADD . /src/cgtab
 
 RUN mkdir /src/cgtab/build && cd /src/cgtab/build && cmake ..
 
-ENTRYPOINT /usr/bin/tail -f /dev/null
+ENTRYPOINT cd /src/cgtab/UnitTest/ && ./SpeedTestDepth.sh

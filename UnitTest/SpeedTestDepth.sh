@@ -1,8 +1,8 @@
 #!/bin/bash
 LOGFILE=$(readlink -f "$1")
-NRUNS=3
+NRUNS=10
 SIZE=10MiB
-NFILES=1
+NFILES=20
 
 
 TEST_SOURCE_REPO_URL=file:///tmp/bin_repo
@@ -23,6 +23,12 @@ mkdir -p "${TEST_SOURCE_REPO_PATH}" && cd "${TEST_SOURCE_REPO_PATH}"
 git init
 git config user.email "you@example.com"
 git config user.name "Your Name"
+cat > .gitattributes <<EOF
+*  binary -delta
+EOF
+git commit .gitattributes -m "turn of deltha compression"
+git config core.compression 0
+git config core.loosecompression 0
 
 git clone "${TEST_SOURCE_REPO_URL}" "${TEST_DST_PULL_REPO_PATH}"
 git init --bare "${TEST_DST_PUSH_REPO_PATH}"
@@ -38,7 +44,7 @@ for((i=0; i < $NRUNS; ++i))
 do
     for((k=0; k < $NFILES; ++k))
     do
-        dd if=/dev/urandom of=random_file$k.bin bs=${SIZE} count=1    
+        dd if=/dev/urandom of=random_file_$(printf "%04d" $k).bin bs=${SIZE} count=1 > /dev/null 2>&1
     done
     REPO_SIZE_BEFORE=$(du .git -sh | awk '{ print $1 }')
     

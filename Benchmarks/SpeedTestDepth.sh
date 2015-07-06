@@ -26,7 +26,8 @@ git config user.name "Your Name"
 cat > .gitattributes <<EOF
 *  binary -delta
 EOF
-git commit .gitattributes -m "turn of deltha compression"
+git add .gitattributes
+git commit -m "turn of deltha compression"
 git config core.compression 0
 git config core.loosecompression 0
 

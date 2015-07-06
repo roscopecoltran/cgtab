@@ -13,11 +13,9 @@ git has some build in features
 * alows to habe mutiple remotes
 * every repository is self contained
 
-## Test Results
-
 ## TODO
 
-*   test how fast a git repository works with binary files, git clone --depth 1 is maybe suitable 
+*   add rsync for speed comparision in benchmarks
 *   split binary files and thirdparty libs in seperate git repository, cmake should then test if the repositorys have the right version
 *   very big files could be stored on local storage, cmake could then test diffrent sources for the repository
 

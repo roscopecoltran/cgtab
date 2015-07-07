@@ -13,6 +13,9 @@ git has some build in features
 * alows to habe mutiple remotes
 * every repository is self contained
 
+## Docs
+[Why Git](https://rawgit.com/gchoinka/cgtab/master/Docs/Presentation/WhyGit/reveal.js/index.html#/)
+
 ## TODO
 
 *   add rsync for speed comparision in benchmarks
